@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="action_grid_demo_entry" model="ir.actions.act_window">
+        <field name="name">Demo Grid Entries</field>
+        <field name="res_model">grid.demo.entry</field>
+        <field name="view_mode">grid,list,form</field>
+    </record>
+
+    <menuitem id="menu_grid_demo_root" name="Grid View Demo" sequence="90" />
+
+    <menuitem
+        id="menu_grid_demo_entry"
+        name="Demo Entries"
+        parent="menu_grid_demo_root"
+        action="action_grid_demo_entry"
+        sequence="10"
+    />
+</odoo>

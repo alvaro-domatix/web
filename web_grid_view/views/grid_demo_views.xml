@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_grid_demo_entry_grid" model="ir.ui.view">
+        <field name="name">grid.demo.entry.grid</field>
+        <field name="model">grid.demo.entry</field>
+        <field name="arch" type="xml">
+            <grid string="Demo Grid" editable="1" create_inline="1">
+                <field name="category" type="row" section="1" />
+                <field name="user_id" type="row" />
+                <field name="date" type="col">
+                    <range name="day" string="Day" span="day" step="day" />
+                    <range
+                        name="week"
+                        string="Week"
+                        span="week"
+                        step="day"
+                        default="1"
+                    />
+                    <range name="month" string="Month" span="month" step="day" />
+                </field>
+                <field name="value" type="measure" widget="float" />
+            </grid>
+        </field>
+    </record>
+
+    <record id="view_grid_demo_entry_form" model="ir.ui.view">
+        <field name="name">grid.demo.entry.form</field>
+        <field name="model">grid.demo.entry</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="date" />
+                        <field name="user_id" />
+                        <field name="category" />
+                        <field name="value" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_grid_demo_entry_list" model="ir.ui.view">
+        <field name="name">grid.demo.entry.list</field>
+        <field name="model">grid.demo.entry</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="date" />
+                <field name="user_id" />
+                <field name="category" />
+                <field name="value" />
+            </list>
+        </field>
+    </record>
+</odoo>

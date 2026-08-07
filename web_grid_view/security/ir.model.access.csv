@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_grid_demo_entry_user,grid.demo.entry.user,model_grid_demo_entry,base.group_user,1,1,1,1
