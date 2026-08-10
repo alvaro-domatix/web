@@ -1,8 +1,7 @@
-/** @odoo-module **/
-
+import {Domain} from "@web/core/domain";
 import {KeepLast} from "@web/core/utils/concurrency";
 import {Model} from "@web/model/model";
-import {Domain} from "@web/core/domain";
+import {browser} from "@web/core/browser/browser";
 
 const {DateTime} = luxon;
 
@@ -36,7 +35,11 @@ export class GridModel extends Model {
         const ranges = archInfo?.ranges || [];
         if (ranges.length) {
             this.ranges = ranges;
-            this.activeRange = ranges.find((r) => r.isDefault) || ranges[0];
+            const savedRangeName = this._getSavedScale();
+            this.activeRange =
+                ranges.find((r) => r.name === savedRangeName) ||
+                ranges.find((r) => r.isDefault) ||
+                ranges[0];
         }
     }
 
@@ -50,24 +53,22 @@ export class GridModel extends Model {
         await this.loadData();
     }
 
-    _getSavedScale(params) {
-        if (typeof localStorage !== "undefined" && params.viewId) {
-            return localStorage.getItem(`scaleOf-viewId-${params.viewId}`);
+    get storageKey() {
+        return `scaleOf-viewId-${this.env.config.viewId}`;
+    }
+
+    _getSavedScale() {
+        if (!this.env.config.viewId) {
+            return null;
         }
-        return null;
+        return browser.localStorage.getItem(this.storageKey);
     }
 
     _saveScale() {
-        if (
-            this._searchParams?.viewId &&
-            this.activeRange &&
-            typeof localStorage !== "undefined"
-        ) {
-            localStorage.setItem(
-                `scaleOf-viewId-${this._searchParams.viewId}`,
-                this.activeRange.name
-            );
+        if (!this.env.config.viewId || !this.activeRange) {
+            return;
         }
+        browser.localStorage.setItem(this.storageKey, this.activeRange.name);
     }
 
     setRange(rangeName) {
@@ -260,17 +261,29 @@ export class GridModel extends Model {
                 const rfVal = group[rfName];
                 let partKey = "";
                 let partLabel = "";
+                let partValue = rfVal;
                 if (rfVal instanceof Array) {
                     partKey = String(rfVal[0]);
                     partLabel = rfVal[1];
+                    partValue = rfVal[0];
                 } else {
-                    partKey = String(rfVal || "");
-                    partLabel = String(rfVal || "");
+                    partKey = String(rfVal ?? "");
+                    partLabel = String(rfVal ?? "");
                 }
-                rowParts.push({name: rfName, key: partKey, label: partLabel});
+                rowParts.push({
+                    name: rfName,
+                    key: partKey,
+                    label: partLabel,
+                    value: partValue ?? false,
+                });
             }
             const rowKey = rowParts.map((p) => p.key).join("||");
-            const rowLabel = rowParts.map((p) => p.label).join(" · ");
+            // The section field is already displayed by the section header, so
+            // it is dropped from the row label to avoid repeating it.
+            const labelParts = rowParts.filter(
+                (p) => !this.hasSections || p.name !== this.sectionFieldName
+            );
+            const rowLabel = labelParts.map((p) => p.label).join(" · ");
 
             let section = null;
             if (this.hasSections) {
@@ -293,6 +306,8 @@ export class GridModel extends Model {
                     id: rowKey,
                     label: rowLabel,
                     parts: rowParts,
+                    labelParts,
+                    domain: rowParts.map((p) => [p.name, "=", p.value]),
                     cells: {},
                     grandTotal: 0,
                     sectionId: this.hasSections ? sectionKey : null,
@@ -315,22 +330,46 @@ export class GridModel extends Model {
             };
         }
 
+        const byLabel = (a, b) => String(a.label).localeCompare(String(b.label));
         if (this.hasSections) {
-            this.sections = Object.values(sectionMap).sort((a, b) =>
-                String(a.label).localeCompare(String(b.label))
-            );
+            this.sections = Object.values(sectionMap).sort(byLabel);
             for (const section of this.sections) {
-                section.rows = Object.values(section.rows).sort((a, b) =>
-                    String(a.label).localeCompare(String(b.label))
-                );
+                section.rows = Object.values(section.rows).sort(byLabel);
+                section.rows.forEach((row) => this._fillEmptyCells(row));
             }
             this.rows = [];
         } else {
-            this.rows = Object.values(rowMap).sort((a, b) =>
-                String(a.label).localeCompare(String(b.label))
-            );
+            this.rows = Object.values(rowMap).sort(byLabel);
+            this.rows.forEach((row) => this._fillEmptyCells(row));
             this.sections = [];
         }
+    }
+
+    /**
+     * Rows only get cells for the groups the server returned. The remaining
+     * ones are filled in here so that the whole period is displayed and every
+     * cell can be edited, not just the ones that already hold a value.
+     */
+    _fillEmptyCells(row) {
+        for (const column of this.columns) {
+            if (row.cells[column.id]) {
+                continue;
+            }
+            row.cells[column.id] = {
+                column,
+                value: 0,
+                domain: Domain.and([
+                    this._searchParams.domain,
+                    column.domain,
+                    row.domain,
+                ]).toList(),
+                readonly: false,
+            };
+        }
+    }
+
+    hasData() {
+        return this.hasSections ? this.sections.length > 0 : this.rows.length > 0;
     }
 
     _extractDateId(dateValue) {
@@ -347,25 +386,30 @@ export class GridModel extends Model {
 
     async updateCell(rowId, columnId, value) {
         const row = this._findRow(rowId);
-        if (!row) return;
+        if (!row) {
+            return;
+        }
         const cell = row.cells[columnId];
-        if (!cell) return;
+        if (!cell) {
+            return;
+        }
 
-        const oldValue = cell.value;
-        const delta = value - oldValue;
-        if (delta === 0) return;
+        const delta = value - cell.value;
+        if (delta === 0) {
+            return;
+        }
 
+        // Call_kw always takes the recordset ids as its first argument.
         const result = await this.orm.call(
             this.resModel,
             "grid_update_cell",
-            [cell.domain, this.measureFieldName, delta],
+            [[], cell.domain, this.measureFieldName, delta],
             {context: this._searchParams.context}
         );
 
-        cell.value = value;
-        row.grandTotal += delta;
-        const col = this.columns.find((c) => c.id === columnId);
-        if (col) col.grandTotal += delta;
+        // Reload instead of patching the cell: the override is free to create,
+        // split or reassign records, so only the server knows the new totals.
+        await this.loadData();
 
         return result;
     }

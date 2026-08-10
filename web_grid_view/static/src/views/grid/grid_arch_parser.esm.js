@@ -1,5 +1,3 @@
-/** @odoo-module **/
-
 export class GridArchParser {
     parse(xmlDoc) {
         const root = xmlDoc;
@@ -62,7 +60,7 @@ export class GridArchParser {
                     break;
                 }
                 case "measure": {
-                    measureField = {name, string, operator};
+                    measureField = {name, string, operator, widget};
                     break;
                 }
                 case "readonly": {

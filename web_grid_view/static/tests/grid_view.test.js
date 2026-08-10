@@ -1,14 +1,23 @@
-/** @odoo-module **/
+import {describe, expect, test} from "@odoo/hoot";
+import {registry} from "@web/core/registry";
 
-import {getFixture} from "@web/../tests/web_test_helpers";
+describe.current.tags("headless");
 
-QUnit.module("web_grid_view", {
-    beforeEach() {
-        getFixture();
-    },
+test("the grid view type is registered", () => {
+    expect(registry.category("views").contains("grid")).toBe(true);
 });
 
-QUnit.test("grid view skeleton installs cleanly", async (assert) => {
-    assert.expect(1);
-    assert.ok(true, "web_grid_view module is loaded");
+test("cell widgets are registered", () => {
+    const components = registry.category("grid_components");
+    expect(components.contains("float")).toBe(true);
+    expect(components.contains("integer")).toBe(true);
+    expect(components.contains("float_time")).toBe(true);
+    expect(components.contains("float_toggle")).toBe(true);
+});
+
+test("row label widgets are registered", () => {
+    const components = registry.category("grid_row_components");
+    expect(components.contains("many2one")).toBe(true);
+    expect(components.contains("selection")).toBe(true);
+    expect(components.contains("char")).toBe(true);
 });

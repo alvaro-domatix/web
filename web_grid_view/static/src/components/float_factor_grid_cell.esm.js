@@ -1,5 +1,3 @@
-/** @odoo-module **/
-
 import {GridCell} from "./grid_cell.esm";
 import {registry} from "@web/core/registry";
 

@@ -25,7 +25,6 @@
             "web_grid_view/static/src/views/grid/grid_view.scss",
             "web_grid_view/static/src/views/grid/grid_renderer.scss",
             "web_grid_view/static/src/hooks/input_hook.esm.js",
-            "web_grid_view/static/src/hooks/grid_cell_hook.esm.js",
             "web_grid_view/static/src/components/grid_cell.esm.js",
             "web_grid_view/static/src/components/grid_cell.xml",
             "web_grid_view/static/src/components/grid_component.esm.js",
@@ -46,7 +45,7 @@
             "web_grid_view/static/src/views/grid/grid_controller.xml",
             "web_grid_view/static/src/views/grid/grid_view.esm.js",
         ],
-        "web.qunit_suite_tests": [
+        "web.assets_unit_tests": [
             "web_grid_view/static/tests/grid_view.test.js",
         ],
     },

@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
+    <t t-name="web_grid_view.GridCells">
+        <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+            <div
+                t-att-class="'o_grid_cell' + (col.isToday ? ' o_grid_today' : '') + (col.isWeekend ? ' o_grid_weekend' : '') + (isHovered(row.id, col.id) ? ' o_grid_hovered' : '')"
+                t-att-data-row-id="row.id"
+                t-att-data-col-id="col.id"
+                t-on-mouseover="() => this.onCellMouseOver(row.id, col.id)"
+                t-on-mouseout="() => this.onCellMouseOut()"
+                t-on-click="() => this.onCellClick(row.id, col.id)"
+            >
+                <GridComponent
+                    type="getFieldType()"
+                    widget="getWidget()"
+                    cell="getCell(row, col.id)"
+                    row="row"
+                    isEditing="isEditing(row.id, col.id)"
+                    onCommit.bind="onCellCommit"
+                    onNavigate.bind="onCellNavigate"
+                />
+            </div>
+        </t>
+    </t>
+
+    <t t-name="web_grid_view.GridRowLine">
+        <div
+            class="o_grid_row_label"
+            t-att-data-row-id="row.id"
+            t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
+        >
+            <t t-component="getRowLabelComponent(row)" row="row" />
+        </div>
+        <t t-call="web_grid_view.GridCells" />
+        <div
+            class="o_grid_row_total"
+            t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
+        >
+            <strong t-esc="formatValue(row.grandTotal)" />
+        </div>
+    </t>
+
     <t t-name="web_grid_view.GridRenderer">
         <div class="o_grid_renderer" t-ref="grid">
             <t t-if="!model.activeRange">
@@ -58,47 +98,7 @@
 
                                 <!-- Rows in section -->
                                 <t t-foreach="section.rows" t-as="row" t-key="row.id">
-                                    <div
-                                        class="o_grid_row_label"
-                                        t-att-data-row-id="row.id"
-                                        t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
-                                    >
-                                        <span t-esc="row.label" />
-                                    </div>
-                                    <t
-                                        t-foreach="visibleColumns"
-                                        t-as="col"
-                                        t-key="col.id"
-                                    >
-                                        <div
-                                            t-att-class="'o_grid_cell' + (col.isToday ? ' o_grid_today' : '') + (col.isWeekend ? ' o_grid_weekend' : '') + (isHovered(row.id, col.id) ? ' o_grid_hovered' : '')"
-                                            t-att-data-row-id="row.id"
-                                            t-att-data-col-id="col.id"
-                                            t-on-mouseover="onCellMouseOver(row.id, col.id)"
-                                            t-on-mouseout="onCellMouseOut()"
-                                            t-on-click="onCellClick(row.id, col.id)"
-                                        >
-                                            <t t-if="isEditing(row.id, col.id)">
-                                                <input
-                                                    type="text"
-                                                    class="o_grid_cell_input form-control form-control-sm"
-                                                    t-att-value="getCell(row, col.id)?.value or ''"
-                                                    t-on-keydown.prevent="onCellNavigate"
-                                                />
-                                            </t>
-                                            <t t-elif="getCell(row, col.id)">
-                                                <span
-                                                    t-esc="formatValue(getCell(row, col.id).value)"
-                                                />
-                                            </t>
-                                        </div>
-                                    </t>
-                                    <div
-                                        class="o_grid_row_total"
-                                        t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
-                                    >
-                                        <strong t-esc="formatValue(row.grandTotal)" />
-                                    </div>
+                                    <t t-call="web_grid_view.GridRowLine" />
                                 </t>
                             </t>
                         </t>
@@ -106,42 +106,7 @@
                         <!-- Rows without sections -->
                         <t t-else="">
                             <t t-foreach="model.rows" t-as="row" t-key="row.id">
-                                <div
-                                    class="o_grid_row_label"
-                                    t-att-data-row-id="row.id"
-                                    t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
-                                >
-                                    <span t-esc="row.label" />
-                                </div>
-                                <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
-                                    <div
-                                        t-att-class="'o_grid_cell' + (col.isToday ? ' o_grid_today' : '') + (col.isWeekend ? ' o_grid_weekend' : '') + (isHovered(row.id, col.id) ? ' o_grid_hovered' : '')"
-                                        t-att-data-row-id="row.id"
-                                        t-att-data-col-id="col.id"
-                                        t-on-mouseover="onCellMouseOver(row.id, col.id)"
-                                        t-on-mouseout="onCellMouseOut()"
-                                        t-on-click="onCellClick(row.id, col.id)"
-                                    >
-                                        <t t-if="isEditing(row.id, col.id)">
-                                            <input
-                                                type="text"
-                                                class="o_grid_cell_input form-control form-control-sm"
-                                                t-att-value="getCell(row, col.id)?.value or ''"
-                                            />
-                                        </t>
-                                        <t t-elif="getCell(row, col.id)">
-                                            <span
-                                                t-esc="formatValue(getCell(row, col.id).value)"
-                                            />
-                                        </t>
-                                    </div>
-                                </t>
-                                <div
-                                    class="o_grid_row_total"
-                                    t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
-                                >
-                                    <strong t-esc="formatValue(row.grandTotal)" />
-                                </div>
+                                <t t-call="web_grid_view.GridRowLine" />
                             </t>
                         </t>
 

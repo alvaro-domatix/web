@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="web_grid_view.GridCell">
-        <t t-if="isEditing">
+        <t t-if="props.isEditing">
             <input
                 type="text"
                 t-ref="input"
@@ -9,6 +9,7 @@
                 t-on-input="input.onInput"
                 t-on-keydown="input.onKeydown"
                 t-on-blur="input.commit"
+                t-on-click.stop=""
             />
         </t>
         <t t-else="">

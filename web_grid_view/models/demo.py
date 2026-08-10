@@ -23,13 +23,32 @@ class GridDemoEntry(models.Model):
 
     def grid_update_cell(self, domain, measure_field_name, value):
         records = self.search(domain)
-        if len(records) == 1:
-            current = records[measure_field_name]
-            records.write({measure_field_name: current + value})
+        if records:
+            record = records[0]
+            record.write({measure_field_name: record[measure_field_name] + value})
             return True
-        if len(records) > 1:
-            first = records[0]
-            first.copy({measure_field_name: first[measure_field_name] + value})
-            return True
-        self.create({measure_field_name: value})
+        values = self._grid_values_from_domain(domain)
+        values[measure_field_name] = value
+        values.setdefault("name", "Grid entry")
+        self.create(values)
         return True
+
+    def _grid_values_from_domain(self, domain):
+        """Derive creation values from the domain of an empty cell.
+
+        Equality leaves give the value directly. Date columns are expressed as
+        a range, so the lower bound is taken as the date of the new record.
+        """
+        values = {}
+        for leaf in domain:
+            if not isinstance(leaf, (list, tuple)) or len(leaf) != 3:
+                continue
+            field_name, operator, leaf_value = leaf
+            field = self._fields.get(field_name)
+            if not field:
+                continue
+            if operator == "=":
+                values[field_name] = leaf_value
+            elif operator == ">=" and field.type in ("date", "datetime"):
+                values[field_name] = leaf_value
+        return values

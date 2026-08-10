@@ -1,6 +1,5 @@
-/** @odoo-module **/
-
 import {Component} from "@odoo/owl";
+import {GridCell} from "./grid_cell.esm";
 import {registry} from "@web/core/registry";
 
 export class GridComponent extends Component {
@@ -15,15 +14,12 @@ export class GridComponent extends Component {
         onNavigate: {type: Function, optional: true},
     };
 
-    get componentKey() {
-        return this.props.widget || this.props.type;
-    }
-
-    get componentInfo() {
-        return registry.category("grid_components").get(this.componentKey, null);
-    }
-
     get componentClass() {
-        return this.componentInfo?.component || null;
+        const components = registry.category("grid_components");
+        return (
+            components.get(this.props.widget, null)?.component ||
+            components.get(this.props.type, null)?.component ||
+            GridCell
+        );
     }
 }

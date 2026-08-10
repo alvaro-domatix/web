@@ -1,9 +1,11 @@
-/** @odoo-module **/
-
 import {Component, onMounted, useRef, useState} from "@odoo/owl";
+import {GridComponent} from "../../components/grid_component.esm";
+import {GridRow} from "../../components/grid_row.esm";
+import {registry} from "@web/core/registry";
 
 export class GridRenderer extends Component {
     static template = "web_grid_view.GridRenderer";
+    static components = {GridComponent};
     static props = {
         model: {type: Object},
         onCellEdit: {type: Function, optional: true},
@@ -48,7 +50,9 @@ export class GridRenderer extends Component {
     }
 
     formatValue(value) {
-        if (value === undefined || value === null) return "";
+        if (value === undefined || value === null) {
+            return "";
+        }
         return Number(value).toFixed(1);
     }
 
@@ -57,13 +61,17 @@ export class GridRenderer extends Component {
     }
 
     _focusOnToday() {
-        if (!this.gridRef.el) return;
+        if (!this.gridRef.el) {
+            return;
+        }
         const todayCol = this.visibleColumns.find((c) => c.isToday);
         if (todayCol) {
             const cell = this.gridRef.el.querySelector(
                 `[data-col-id="${todayCol.id}"]`
             );
-            if (cell) cell.scrollIntoView({block: "nearest", inline: "center"});
+            if (cell) {
+                cell.scrollIntoView({block: "nearest", inline: "center"});
+            }
         }
     }
 
@@ -78,43 +86,43 @@ export class GridRenderer extends Component {
     }
 
     onCellClick(rowId, colId) {
-        if (!this.model.archInfo?.editable) return;
-        if (!this.model.archInfo?.measureField) return;
+        if (!this.model.archInfo?.editable) {
+            return;
+        }
+        if (!this.model.archInfo?.measureField) {
+            return;
+        }
         this.state.editingRow = rowId;
         this.state.editingCol = colId;
     }
 
-    onCellCommit(value) {
-        if (this.state.editingRow && this.state.editingCol) {
-            this.props.onCellCommit?.(
-                this.state.editingRow,
-                this.state.editingCol,
-                value
-            );
-        }
+    async onCellCommit(value) {
+        const rowId = this.state.editingRow;
+        const colId = this.state.editingCol;
         this.state.editingRow = null;
         this.state.editingCol = null;
+        if (rowId !== null && colId !== null) {
+            await this.props.onCellCommit?.(rowId, colId, value);
+        }
     }
 
     onCellNavigate(key, shift) {
-        if (!this.state.editingRow || !this.state.editingCol) return;
+        const rowId = this.state.editingRow;
+        const colId = this.state.editingCol;
+        if (rowId === null || colId === null) {
+            return;
+        }
         const cols = this.visibleColumns;
-        const colIdx = cols.findIndex((c) => c.id === this.state.editingCol);
-        let nextCol = colIdx;
-        const nextRow = this.state.editingRow;
-
-        if (key === "Tab" && !shift) {
-            nextCol = Math.min(colIdx + 1, cols.length - 1);
-        } else if (key === "Tab" && shift) {
-            nextCol = Math.max(colIdx - 1, 0);
-        } else if (key === "Enter") {
-            nextCol = colIdx;
+        const colIdx = cols.findIndex((c) => c.id === colId);
+        let nextIdx = colIdx;
+        if (key === "Tab") {
+            nextIdx = shift
+                ? Math.max(colIdx - 1, 0)
+                : Math.min(colIdx + 1, cols.length - 1);
         }
-
-        if (nextCol !== colIdx || key === "Enter") {
-            this.state.editingCol = cols[nextCol].id;
-            this.props.onCellNavigate?.(nextRow, cols[nextCol].id);
-        }
+        this.state.editingRow = rowId;
+        this.state.editingCol = cols[nextIdx].id;
+        this.props.onCellNavigate?.(rowId, cols[nextIdx].id);
     }
 
     isHovered(rowId, colId) {
@@ -126,7 +134,7 @@ export class GridRenderer extends Component {
     }
 
     getCell(row, colId) {
-        return row.cells?.[colId] || null;
+        return row.cells?.[colId] || undefined;
     }
 
     getFieldType() {
@@ -134,6 +142,15 @@ export class GridRenderer extends Component {
     }
 
     getWidget() {
-        return this.model.archInfo?.measureField?.widget || null;
+        return this.model.archInfo?.measureField?.widget || undefined;
+    }
+
+    getRowLabelComponent(row) {
+        const fieldName = (row.labelParts || row.parts)?.[0]?.name;
+        const fieldType = this.model.fields?.[fieldName]?.type;
+        return (
+            registry.category("grid_row_components").get(fieldType, null)?.component ||
+            GridRow
+        );
     }
 }

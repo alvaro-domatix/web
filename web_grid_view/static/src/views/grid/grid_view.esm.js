@@ -1,5 +1,3 @@
-/** @odoo-module **/
-
 import {GridArchParser} from "./grid_arch_parser.esm";
 import {GridController} from "./grid_controller.esm";
 import {GridModel} from "./grid_model.esm";
