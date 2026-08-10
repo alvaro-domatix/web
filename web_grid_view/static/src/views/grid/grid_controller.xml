@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="web_grid_view.GridController">
+        <div t-att-class="props.className" class="o_grid_view">
+            <Layout display="props.display">
+                <t t-set-slot="control-panel-additional-actions">
+                    <CogMenu />
+                </t>
+                <t t-set-slot="layout-actions">
+                    <SearchBar toggler="searchBarToggler" />
+                </t>
+                <t t-set-slot="control-panel-navigation-additional">
+                    <t
+                        t-component="searchBarToggler.component"
+                        t-props="searchBarToggler.props"
+                    />
+                </t>
+                <div class="o_grid_container d-flex flex-column h-100">
+                    <div
+                        class="o_grid_toolbar d-flex align-items-center gap-1 px-3 py-2 border-bottom"
+                    >
+                        <div class="o_grid_navigation_buttons btn-group d-print-none">
+                            <button
+                                class="o_grid_button_prev btn btn-secondary"
+                                title="Previous"
+                                aria-label="Previous"
+                                t-on-click.stop="() => this.onPrev()"
+                            >
+                                <i class="oi oi-arrow-left" />
+                            </button>
+                            <button
+                                class="o_grid_button_next btn btn-secondary"
+                                title="Next"
+                                aria-label="Next"
+                                t-on-click.stop="() => this.onNext()"
+                            >
+                                <i class="oi oi-arrow-right" />
+                            </button>
+                        </div>
+                        <ViewScaleSelector
+                            t-if="model.ranges.length"
+                            scales="scales"
+                            currentScale="activeRangeName"
+                            isWeekendVisible="model.showWeekends"
+                            setScale.bind="onRangeSelect"
+                            toggleWeekendVisibility.bind="onToggleWeekends"
+                            dropdownClass="'d-print-none'"
+                        />
+                        <button
+                            class="o_grid_button_today btn btn-secondary d-print-none"
+                            t-on-click.stop="() => this.onToday()"
+                        >Today</button>
+                        <h5 class="o_grid_period_label d-inline-flex ps-2 mb-0">
+                            <t t-esc="periodLabel" />
+                        </h5>
+                    </div>
+                    <GridRenderer
+                        model="model"
+                        onCellCommit.bind="onCellCommit"
+                        canCreateInline="canCreateInline"
+                        onCreateInline.bind="onCreateInline"
+                    />
+                </div>
+            </Layout>
+        </div>
+    </t>
+</templates>

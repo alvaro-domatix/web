@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="demo_entry_1" model="grid.demo.entry">
+        <field name="name">Demo Entry 1</field>
+        <field name="date">2026-08-03</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">1.5</field>
+    </record>
+    <record id="demo_entry_2" model="grid.demo.entry">
+        <field name="name">Demo Entry 2</field>
+        <field name="date">2026-08-03</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">7.7</field>
+    </record>
+    <record id="demo_entry_3" model="grid.demo.entry">
+        <field name="name">Demo Entry 3</field>
+        <field name="date">2026-08-03</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">2.3</field>
+    </record>
+    <record id="demo_entry_4" model="grid.demo.entry">
+        <field name="name">Demo Entry 4</field>
+        <field name="date">2026-08-03</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">2.3</field>
+    </record>
+    <record id="demo_entry_5" model="grid.demo.entry">
+        <field name="name">Demo Entry 5</field>
+        <field name="date">2026-08-03</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">5.2</field>
+    </record>
+    <record id="demo_entry_6" model="grid.demo.entry">
+        <field name="name">Demo Entry 6</field>
+        <field name="date">2026-08-03</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">6.5</field>
+    </record>
+    <record id="demo_entry_7" model="grid.demo.entry">
+        <field name="name">Demo Entry 7</field>
+        <field name="date">2026-08-04</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">2.9</field>
+    </record>
+    <record id="demo_entry_8" model="grid.demo.entry">
+        <field name="name">Demo Entry 8</field>
+        <field name="date">2026-08-04</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">2.2</field>
+    </record>
+    <record id="demo_entry_9" model="grid.demo.entry">
+        <field name="name">Demo Entry 9</field>
+        <field name="date">2026-08-04</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">4.0</field>
+    </record>
+    <record id="demo_entry_10" model="grid.demo.entry">
+        <field name="name">Demo Entry 10</field>
+        <field name="date">2026-08-04</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">4.8</field>
+    </record>
+    <record id="demo_entry_11" model="grid.demo.entry">
+        <field name="name">Demo Entry 11</field>
+        <field name="date">2026-08-04</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">3.9</field>
+    </record>
+    <record id="demo_entry_12" model="grid.demo.entry">
+        <field name="name">Demo Entry 12</field>
+        <field name="date">2026-08-04</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">4.1</field>
+    </record>
+    <record id="demo_entry_13" model="grid.demo.entry">
+        <field name="name">Demo Entry 13</field>
+        <field name="date">2026-08-05</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">2.4</field>
+    </record>
+    <record id="demo_entry_14" model="grid.demo.entry">
+        <field name="name">Demo Entry 14</field>
+        <field name="date">2026-08-05</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">1.3</field>
+    </record>
+    <record id="demo_entry_15" model="grid.demo.entry">
+        <field name="name">Demo Entry 15</field>
+        <field name="date">2026-08-05</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">7.7</field>
+    </record>
+    <record id="demo_entry_16" model="grid.demo.entry">
+        <field name="name">Demo Entry 16</field>
+        <field name="date">2026-08-05</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">3.2</field>
+    </record>
+    <record id="demo_entry_17" model="grid.demo.entry">
+        <field name="name">Demo Entry 17</field>
+        <field name="date">2026-08-05</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">4.4</field>
+    </record>
+    <record id="demo_entry_18" model="grid.demo.entry">
+        <field name="name">Demo Entry 18</field>
+        <field name="date">2026-08-05</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">1.9</field>
+    </record>
+    <record id="demo_entry_19" model="grid.demo.entry">
+        <field name="name">Demo Entry 19</field>
+        <field name="date">2026-08-06</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">5.6</field>
+    </record>
+    <record id="demo_entry_20" model="grid.demo.entry">
+        <field name="name">Demo Entry 20</field>
+        <field name="date">2026-08-06</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">7.3</field>
+    </record>
+    <record id="demo_entry_21" model="grid.demo.entry">
+        <field name="name">Demo Entry 21</field>
+        <field name="date">2026-08-06</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">1.7</field>
+    </record>
+    <record id="demo_entry_22" model="grid.demo.entry">
+        <field name="name">Demo Entry 22</field>
+        <field name="date">2026-08-06</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">7.7</field>
+    </record>
+    <record id="demo_entry_23" model="grid.demo.entry">
+        <field name="name">Demo Entry 23</field>
+        <field name="date">2026-08-06</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">7.4</field>
+    </record>
+    <record id="demo_entry_24" model="grid.demo.entry">
+        <field name="name">Demo Entry 24</field>
+        <field name="date">2026-08-06</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">5.8</field>
+    </record>
+    <record id="demo_entry_25" model="grid.demo.entry">
+        <field name="name">Demo Entry 25</field>
+        <field name="date">2026-08-07</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">3.3</field>
+    </record>
+    <record id="demo_entry_26" model="grid.demo.entry">
+        <field name="name">Demo Entry 26</field>
+        <field name="date">2026-08-07</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">6.1</field>
+    </record>
+    <record id="demo_entry_27" model="grid.demo.entry">
+        <field name="name">Demo Entry 27</field>
+        <field name="date">2026-08-07</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">5.4</field>
+    </record>
+    <record id="demo_entry_28" model="grid.demo.entry">
+        <field name="name">Demo Entry 28</field>
+        <field name="date">2026-08-07</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">1.3</field>
+    </record>
+    <record id="demo_entry_29" model="grid.demo.entry">
+        <field name="name">Demo Entry 29</field>
+        <field name="date">2026-08-07</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">4.6</field>
+    </record>
+    <record id="demo_entry_30" model="grid.demo.entry">
+        <field name="name">Demo Entry 30</field>
+        <field name="date">2026-08-07</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">4.5</field>
+    </record>
+    <record id="demo_entry_31" model="grid.demo.entry">
+        <field name="name">Demo Entry 31</field>
+        <field name="date">2026-08-08</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">0.6</field>
+    </record>
+    <record id="demo_entry_32" model="grid.demo.entry">
+        <field name="name">Demo Entry 32</field>
+        <field name="date">2026-08-08</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">1.1</field>
+    </record>
+    <record id="demo_entry_33" model="grid.demo.entry">
+        <field name="name">Demo Entry 33</field>
+        <field name="date">2026-08-08</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">4.8</field>
+    </record>
+    <record id="demo_entry_34" model="grid.demo.entry">
+        <field name="name">Demo Entry 34</field>
+        <field name="date">2026-08-08</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">4.5</field>
+    </record>
+    <record id="demo_entry_35" model="grid.demo.entry">
+        <field name="name">Demo Entry 35</field>
+        <field name="date">2026-08-08</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">4.6</field>
+    </record>
+    <record id="demo_entry_36" model="grid.demo.entry">
+        <field name="name">Demo Entry 36</field>
+        <field name="date">2026-08-08</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">3.0</field>
+    </record>
+    <record id="demo_entry_37" model="grid.demo.entry">
+        <field name="name">Demo Entry 37</field>
+        <field name="date">2026-08-09</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">5.6</field>
+    </record>
+    <record id="demo_entry_38" model="grid.demo.entry">
+        <field name="name">Demo Entry 38</field>
+        <field name="date">2026-08-09</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">5.3</field>
+    </record>
+    <record id="demo_entry_39" model="grid.demo.entry">
+        <field name="name">Demo Entry 39</field>
+        <field name="date">2026-08-09</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">2.1</field>
+    </record>
+    <record id="demo_entry_40" model="grid.demo.entry">
+        <field name="name">Demo Entry 40</field>
+        <field name="date">2026-08-09</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">3.9</field>
+    </record>
+    <record id="demo_entry_41" model="grid.demo.entry">
+        <field name="name">Demo Entry 41</field>
+        <field name="date">2026-08-09</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">3.4</field>
+    </record>
+    <record id="demo_entry_42" model="grid.demo.entry">
+        <field name="name">Demo Entry 42</field>
+        <field name="date">2026-08-09</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">5.3</field>
+    </record>
+    <record id="demo_entry_43" model="grid.demo.entry">
+        <field name="name">Demo Entry 43</field>
+        <field name="date">2026-08-10</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">0.8</field>
+    </record>
+    <record id="demo_entry_44" model="grid.demo.entry">
+        <field name="name">Demo Entry 44</field>
+        <field name="date">2026-08-10</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">3.6</field>
+    </record>
+    <record id="demo_entry_45" model="grid.demo.entry">
+        <field name="name">Demo Entry 45</field>
+        <field name="date">2026-08-10</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">2.5</field>
+    </record>
+    <record id="demo_entry_46" model="grid.demo.entry">
+        <field name="name">Demo Entry 46</field>
+        <field name="date">2026-08-10</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">7.2</field>
+    </record>
+    <record id="demo_entry_47" model="grid.demo.entry">
+        <field name="name">Demo Entry 47</field>
+        <field name="date">2026-08-10</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">3.1</field>
+    </record>
+    <record id="demo_entry_48" model="grid.demo.entry">
+        <field name="name">Demo Entry 48</field>
+        <field name="date">2026-08-10</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">4.6</field>
+    </record>
+    <record id="demo_entry_49" model="grid.demo.entry">
+        <field name="name">Demo Entry 49</field>
+        <field name="date">2026-08-11</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">1.0</field>
+    </record>
+    <record id="demo_entry_50" model="grid.demo.entry">
+        <field name="name">Demo Entry 50</field>
+        <field name="date">2026-08-11</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">4.2</field>
+    </record>
+    <record id="demo_entry_51" model="grid.demo.entry">
+        <field name="name">Demo Entry 51</field>
+        <field name="date">2026-08-11</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">2.3</field>
+    </record>
+    <record id="demo_entry_52" model="grid.demo.entry">
+        <field name="name">Demo Entry 52</field>
+        <field name="date">2026-08-11</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">7.8</field>
+    </record>
+    <record id="demo_entry_53" model="grid.demo.entry">
+        <field name="name">Demo Entry 53</field>
+        <field name="date">2026-08-11</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">5.1</field>
+    </record>
+    <record id="demo_entry_54" model="grid.demo.entry">
+        <field name="name">Demo Entry 54</field>
+        <field name="date">2026-08-11</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">7.4</field>
+    </record>
+    <record id="demo_entry_55" model="grid.demo.entry">
+        <field name="name">Demo Entry 55</field>
+        <field name="date">2026-08-12</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">1.2</field>
+    </record>
+    <record id="demo_entry_56" model="grid.demo.entry">
+        <field name="name">Demo Entry 56</field>
+        <field name="date">2026-08-12</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">7.7</field>
+    </record>
+    <record id="demo_entry_57" model="grid.demo.entry">
+        <field name="name">Demo Entry 57</field>
+        <field name="date">2026-08-12</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">0.8</field>
+    </record>
+    <record id="demo_entry_58" model="grid.demo.entry">
+        <field name="name">Demo Entry 58</field>
+        <field name="date">2026-08-12</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">4.9</field>
+    </record>
+    <record id="demo_entry_59" model="grid.demo.entry">
+        <field name="name">Demo Entry 59</field>
+        <field name="date">2026-08-12</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">2.2</field>
+    </record>
+    <record id="demo_entry_60" model="grid.demo.entry">
+        <field name="name">Demo Entry 60</field>
+        <field name="date">2026-08-12</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">2.8</field>
+    </record>
+    <record id="demo_entry_61" model="grid.demo.entry">
+        <field name="name">Demo Entry 61</field>
+        <field name="date">2026-08-13</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">4.2</field>
+    </record>
+    <record id="demo_entry_62" model="grid.demo.entry">
+        <field name="name">Demo Entry 62</field>
+        <field name="date">2026-08-13</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">7.5</field>
+    </record>
+    <record id="demo_entry_63" model="grid.demo.entry">
+        <field name="name">Demo Entry 63</field>
+        <field name="date">2026-08-13</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">3.8</field>
+    </record>
+    <record id="demo_entry_64" model="grid.demo.entry">
+        <field name="name">Demo Entry 64</field>
+        <field name="date">2026-08-13</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">4.1</field>
+    </record>
+    <record id="demo_entry_65" model="grid.demo.entry">
+        <field name="name">Demo Entry 65</field>
+        <field name="date">2026-08-13</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">3.6</field>
+    </record>
+    <record id="demo_entry_66" model="grid.demo.entry">
+        <field name="name">Demo Entry 66</field>
+        <field name="date">2026-08-13</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">1.0</field>
+    </record>
+    <record id="demo_entry_67" model="grid.demo.entry">
+        <field name="name">Demo Entry 67</field>
+        <field name="date">2026-08-14</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">1.1</field>
+    </record>
+    <record id="demo_entry_68" model="grid.demo.entry">
+        <field name="name">Demo Entry 68</field>
+        <field name="date">2026-08-14</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">6.1</field>
+    </record>
+    <record id="demo_entry_69" model="grid.demo.entry">
+        <field name="name">Demo Entry 69</field>
+        <field name="date">2026-08-14</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">5.6</field>
+    </record>
+    <record id="demo_entry_70" model="grid.demo.entry">
+        <field name="name">Demo Entry 70</field>
+        <field name="date">2026-08-14</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">7.3</field>
+    </record>
+    <record id="demo_entry_71" model="grid.demo.entry">
+        <field name="name">Demo Entry 71</field>
+        <field name="date">2026-08-14</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">2.9</field>
+    </record>
+    <record id="demo_entry_72" model="grid.demo.entry">
+        <field name="name">Demo Entry 72</field>
+        <field name="date">2026-08-14</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">1.1</field>
+    </record>
+    <record id="demo_entry_73" model="grid.demo.entry">
+        <field name="name">Demo Entry 73</field>
+        <field name="date">2026-08-15</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">2.6</field>
+    </record>
+    <record id="demo_entry_74" model="grid.demo.entry">
+        <field name="name">Demo Entry 74</field>
+        <field name="date">2026-08-15</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">6.9</field>
+    </record>
+    <record id="demo_entry_75" model="grid.demo.entry">
+        <field name="name">Demo Entry 75</field>
+        <field name="date">2026-08-15</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">3.9</field>
+    </record>
+    <record id="demo_entry_76" model="grid.demo.entry">
+        <field name="name">Demo Entry 76</field>
+        <field name="date">2026-08-15</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">3.3</field>
+    </record>
+    <record id="demo_entry_77" model="grid.demo.entry">
+        <field name="name">Demo Entry 77</field>
+        <field name="date">2026-08-15</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">6.5</field>
+    </record>
+    <record id="demo_entry_78" model="grid.demo.entry">
+        <field name="name">Demo Entry 78</field>
+        <field name="date">2026-08-15</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">6.6</field>
+    </record>
+    <record id="demo_entry_79" model="grid.demo.entry">
+        <field name="name">Demo Entry 79</field>
+        <field name="date">2026-08-16</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">1.6</field>
+    </record>
+    <record id="demo_entry_80" model="grid.demo.entry">
+        <field name="name">Demo Entry 80</field>
+        <field name="date">2026-08-16</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">a</field>
+        <field name="value">2.5</field>
+    </record>
+    <record id="demo_entry_81" model="grid.demo.entry">
+        <field name="name">Demo Entry 81</field>
+        <field name="date">2026-08-16</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">4.3</field>
+    </record>
+    <record id="demo_entry_82" model="grid.demo.entry">
+        <field name="name">Demo Entry 82</field>
+        <field name="date">2026-08-16</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">b</field>
+        <field name="value">1.6</field>
+    </record>
+    <record id="demo_entry_83" model="grid.demo.entry">
+        <field name="name">Demo Entry 83</field>
+        <field name="date">2026-08-16</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">4.2</field>
+    </record>
+    <record id="demo_entry_84" model="grid.demo.entry">
+        <field name="name">Demo Entry 84</field>
+        <field name="date">2026-08-16</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="category">c</field>
+        <field name="value">6.0</field>
+    </record>
+</odoo>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="web_grid_view.GridCells">
+        <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+            <div
+                t-att-class="'o_grid_cell' + (col.isToday ? ' o_grid_today' : '') + (col.isWeekend ? ' o_grid_weekend' : '') + (isHovered(row.id, col.id) ? ' o_grid_hovered' : '') + (getCell(row, col.id)?.readonly ? ' o_grid_readonly' : '')"
+                t-att-data-row-id="row.id"
+                t-att-data-col-id="col.id"
+                t-on-mouseover="() => this.onCellMouseOver(row.id, col.id)"
+                t-on-mouseout="() => this.onCellMouseOut()"
+                t-on-click="() => this.onCellClick(row.id, col.id)"
+            >
+                <GridComponent
+                    type="getFieldType()"
+                    widget="getWidget()"
+                    cell="getCell(row, col.id)"
+                    row="row"
+                    isEditing="isEditing(row.id, col.id)"
+                    onCommit.bind="onCellCommit"
+                    onNavigate.bind="onCellNavigate"
+                />
+            </div>
+        </t>
+    </t>
+
+    <t t-name="web_grid_view.GridRowLine">
+        <div
+            class="o_grid_row_label"
+            t-att-data-row-id="row.id"
+            t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
+        >
+            <t t-component="getRowLabelComponent(row)" row="row" />
+        </div>
+        <t t-call="web_grid_view.GridCells" />
+        <div
+            t-if="showLineTotal"
+            class="o_grid_row_total"
+            t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
+        >
+            <strong t-esc="formatValue(row.grandTotal)" />
+        </div>
+    </t>
+
+    <t t-name="web_grid_view.GridRenderer">
+        <div class="o_grid_renderer" t-ref="grid">
+            <t t-if="!model.activeRange">
+                <div class="text-muted p-4 text-center">
+                    <i class="fa fa-th fa-2x mb-2" />
+                    <p>This view does not support date columns.</p>
+                </div>
+            </t>
+            <t t-elif="!showTable">
+                <div class="text-muted p-4 text-center">
+                    <i class="fa fa-inbox fa-2x mb-2" />
+                    <p>No data for this period.</p>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="o_grid_table_wrap">
+                    <div
+                        class="o_grid_table_inner"
+                        t-att-style="'grid-template-columns: ' + gridTemplateColumns"
+                    >
+                        <!-- Header row -->
+                        <div class="o_grid_header_cell o_grid_corner" />
+                        <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                            <div
+                                t-att-class="'o_grid_header_cell o_grid_col_header' + (col.isToday ? ' o_grid_today' : '') + (col.isWeekend ? ' o_grid_weekend' : '')"
+                                t-att-data-col-id="col.id"
+                            >
+                                <span t-esc="col.label" />
+                            </div>
+                        </t>
+                        <div
+                            t-if="showLineTotal"
+                            class="o_grid_header_cell o_grid_total_header"
+                        >Total</div>
+
+                        <!-- Sections with rows -->
+                        <t t-if="model.hasSections">
+                            <t
+                                t-foreach="model.sections"
+                                t-as="section"
+                                t-key="section.id"
+                            >
+                                <!-- Section header -->
+                                <div
+                                    class="o_grid_section_label"
+                                    t-att-data-row-id="section.id"
+                                >
+                                    <strong t-esc="section.label" />
+                                </div>
+                                <div
+                                    t-foreach="visibleColumns"
+                                    t-as="col"
+                                    t-key="col.id"
+                                    class="o_grid_section_cell"
+                                />
+                                <div t-if="showLineTotal" class="o_grid_section_total">
+                                    <strong t-esc="formatValue(section.grandTotal)" />
+                                </div>
+
+                                <!-- Rows in section -->
+                                <t t-foreach="section.rows" t-as="row" t-key="row.id">
+                                    <t t-call="web_grid_view.GridRowLine" />
+                                </t>
+                            </t>
+                        </t>
+
+                        <!-- Rows without sections -->
+                        <t t-else="">
+                            <t t-foreach="model.rows" t-as="row" t-key="row.id">
+                                <t t-call="web_grid_view.GridRowLine" />
+                            </t>
+                        </t>
+
+                        <!-- Footer: column totals -->
+                        <t t-if="showColumnTotal">
+                            <div class="o_grid_footer_label">
+                                <strong>Total</strong>
+                            </div>
+                            <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                                <div
+                                    class="o_grid_footer_cell"
+                                    t-att-class="state.hoveredCol === col.id ? 'o_grid_hovered' : ''"
+                                >
+                                    <strong t-esc="formatValue(col.grandTotal)" />
+                                </div>
+                            </t>
+                            <div t-if="showLineTotal" class="o_grid_footer_corner" />
+                        </t>
+
+                        <!-- Inline creation row -->
+                        <t t-if="props.canCreateInline">
+                            <div class="o_grid_create_inline">
+                                <button
+                                    class="btn btn-link btn-sm px-0 o_grid_button_add_line"
+                                    t-on-click="() => this.props.onCreateInline()"
+                                >Add a line</button>
+                            </div>
+                            <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                                <div class="o_grid_create_inline_cell" />
+                            </t>
+                            <div
+                                t-if="showLineTotal"
+                                class="o_grid_create_inline_corner"
+                            />
+                        </t>
+
+                        <!-- Bar chart row -->
+                        <t
+                            t-if="model.archInfo &amp;&amp; model.archInfo.hasBarchartTotal"
+                        >
+                            <div class="o_grid_barchart_label" />
+                            <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                                <div class="o_grid_barchart_cell">
+                                    <div
+                                        class="o_grid_barchart_bar"
+                                        t-att-style="'height: ' + getBarHeight(col)"
+                                    />
+                                </div>
+                            </t>
+                            <div t-if="showLineTotal" class="o_grid_barchart_corner" />
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
