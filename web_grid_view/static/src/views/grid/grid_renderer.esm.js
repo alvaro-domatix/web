@@ -1,5 +1,6 @@
 import {Component, onMounted, useRef, useState} from "@odoo/owl";
 import {useService} from "@web/core/utils/hooks";
+import {FormViewDialog} from "@web/views/view_dialogs/form_view_dialog";
 import {GridComponent} from "../../components/grid_component.esm";
 import {GridRow} from "../../components/grid_row.esm";
 import {registry} from "@web/core/registry";
@@ -23,6 +24,7 @@ export class GridRenderer extends Component {
             editingCol: null,
         });
         this.actionService = useService("action");
+        this.dialogService = useService("dialog");
         this.gridRef = useRef("grid");
         onMounted(() => this._focusOnToday());
     }
@@ -87,12 +89,13 @@ export class GridRenderer extends Component {
     onCreateLine(section) {
         const ctx = {default_date: this.model.periodStart.toISODate()};
         if (section) ctx.default_category = section.label;
-        this.actionService.doAction({
-            type: "ir.actions.act_window",
-            res_model: this.model.resModel,
-            views: [[false, "form"]],
-            target: "new",
+        this.dialogService.add(FormViewDialog, {
+            resModel: this.model.resModel,
             context: ctx,
+            title: "Add a Line",
+            onRecordSaved: async () => {
+                await this.model.load(this.model._searchParams);
+            },
         });
     }
 

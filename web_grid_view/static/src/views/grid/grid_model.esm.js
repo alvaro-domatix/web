@@ -80,11 +80,11 @@ export class GridModel extends Model {
     }
 
     moveAnchor(direction) {
-        const step = this.activeRange.step;
+        const span = this.activeRange.span;
         if (direction === "forward") {
-            this.anchor = this.anchor.plus({[step]: 1});
+            this.anchor = this.anchor.plus({[span]: 1});
         } else {
-            this.anchor = this.anchor.minus({[step]: 1});
+            this.anchor = this.anchor.minus({[span]: 1});
         }
         return this.loadData();
     }

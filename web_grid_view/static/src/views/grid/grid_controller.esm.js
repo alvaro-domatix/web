@@ -24,6 +24,10 @@ export class GridController extends Component {
         this.searchBarToggler = useSearchBarToggler();
     }
 
+    get ranges() {
+        return this.model.ranges || [];
+    }
+
     get scales() {
         return Object.fromEntries(
             this.model.ranges.map((range) => [
