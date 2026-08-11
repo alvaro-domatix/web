@@ -41,12 +41,20 @@ export class GridRenderer extends Component {
 
     get gridTemplateColumns() {
         const n = this.visibleColumns.length;
-        const colWidth = this.model.activeRange?.span === "day" ? "10ch" : "8ch";
-        return `minmax(120px, auto) repeat(${n}, minmax(${colWidth}, 1fr)) minmax(8ch, 12em)`;
+        const colWidth = n > 7 ? "minmax(8ch, auto)" : "minmax(10ch, 1fr)";
+        return `auto repeat(${n}, ${colWidth}) minmax(10ch, 10em)`;
+    }
+
+    get grandTotal() {
+        return this.visibleColumns.reduce((sum, col) => sum + (col.grandTotal || 0), 0);
     }
 
     get maxColumnTotal() {
         return Math.max(1, ...this.visibleColumns.map((c) => c.grandTotal));
+    }
+
+    isNegative(value) {
+        return value !== undefined && value !== null && Number(value) < 0;
     }
 
     formatValue(value) {

@@ -80,7 +80,7 @@ export class GridModel extends Model {
     }
 
     moveAnchor(direction) {
-        const step = this.activeRange.span;
+        const step = this.activeRange.step;
         if (direction === "forward") {
             this.anchor = this.anchor.plus({[step]: 1});
         } else {
@@ -116,7 +116,6 @@ export class GridModel extends Model {
     _generateDateColumns() {
         const columns = [];
         const step = this.activeRange.step;
-        const span = this.activeRange.span;
         let current = this.periodStart;
         const end = this.periodEnd;
         const today = DateTime.now().toISODate();
@@ -138,12 +137,13 @@ export class GridModel extends Model {
             ];
 
             let label = "";
-            if (span === "week" || span === "day") {
-                label = current.toFormat("ccc dd", {locale: this._getLocale()});
-            } else if (span === "month") {
-                label = current.toFormat("dd", {locale: this._getLocale()});
+            const locale = this._getLocale();
+            if (step === "month") {
+                label = current.toFormat("MMM\nyyyy", {locale});
             } else {
-                label = current.toFormat("MMM", {locale: this._getLocale()});
+                const weekday = current.toFormat("ccc", {locale});
+                const dayNum = current.toFormat("dd", {locale});
+                label = `${weekday}\n${dayNum}`;
             }
 
             columns.push({
@@ -298,6 +298,10 @@ export class GridModel extends Model {
                 }
                 section = sectionMap[sectionKey];
                 section.grandTotal += value;
+                if (!section.cells[colId]) {
+                    section.cells[colId] = {value: 0};
+                }
+                section.cells[colId].value += value;
             }
 
             const targetRows = this.hasSections ? section.rows : rowMap;

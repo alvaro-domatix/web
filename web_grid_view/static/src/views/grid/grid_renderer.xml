@@ -35,20 +35,24 @@
                     />
                     <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
                         <div
-                            class="o_grid_column_title o_grid_sticky_top d-flex align-items-center justify-content-center px-2 py-2 border-bottom text-bg-100"
+                            class="o_grid_column_title o_grid_sticky_top position-relative d-flex align-items-center justify-content-center px-2 py-2 border-bottom text-bg-100"
                             t-att-class="col.isToday ? 'fw-bolder' : 'fw-bold'"
                             t-att-data-col-id="col.id"
                         >
                             <t t-if="col.isToday">
                                 <div
-                                    class="position-absolute top-0 start-0 w-100 h-100 o_grid_today_overlay"
+                                    class="position-absolute top-0 start-0 w-100 h-100 bg-info bg-opacity-25"
                                 />
                             </t>
-                            <span class="z-1 text-center" t-esc="col.label" />
+                            <span
+                                class="z-1 text-center"
+                                style="white-space: pre-line; line-height: 1.2;"
+                                t-esc="col.label"
+                            />
                         </div>
                     </t>
                     <div
-                        class="o_grid_column_title o_grid_sticky_top d-flex align-items-center justify-content-center px-3 py-2 border-bottom text-bg-200 fw-bold small"
+                        class="o_grid_column_title o_grid_sticky_top o_grid_sticky_right d-flex align-items-center justify-content-center px-3 py-2 border-bottom text-bg-200 fw-bold small"
                     >
                         <span class="z-1" t-esc="measureLabel" />
                     </div>
@@ -58,27 +62,34 @@
                         <t t-foreach="model.sections" t-as="section" t-key="section.id">
                             <!-- Section header -->
                             <div
-                                class="o_grid_section_title o_grid_sticky_left d-flex align-items-center px-3 py-2 border-top bg-200 position-relative"
-                                t-att-data-row-id="section.id"
+                                class="o_grid_section_title o_grid_sticky_left d-flex align-items-center px-3 py-2 border-top bg-200 fw-bold position-relative"
                             >
                                 <span class="z-1 text-truncate" t-esc="section.label" />
                             </div>
-                            <div
-                                t-foreach="visibleColumns"
-                                t-as="col"
-                                t-key="col.id"
-                                class="o_grid_total_cell d-flex align-items-center justify-content-center border-top bg-200"
-                            >
-                                <t t-if="getCell(section, col.id)">
+                            <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                                <div
+                                    class="d-flex align-items-center justify-content-center border-top bg-200 fw-bold position-relative"
+                                    t-att-class="col.isToday ? 'bg-info bg-opacity-10' : ''"
+                                >
+                                    <t t-if="col.isToday">
+                                        <div
+                                            class="position-absolute top-0 start-0 w-100 h-100 bg-info bg-opacity-25"
+                                        />
+                                    </t>
                                     <span
-                                        t-esc="formatValue(getCell(section, col.id)?.value)"
+                                        class="z-1"
+                                        t-att-class="isNegative(section.cells[col.id]?.value) ? 'text-danger' : ''"
+                                        t-esc="section.cells[col.id] ? formatValue(section.cells[col.id].value) : ''"
                                     />
-                                </t>
-                            </div>
+                                </div>
+                            </t>
                             <div
-                                class="o_grid_total_cell d-flex align-items-center justify-content-center border-top bg-200"
+                                class="d-flex align-items-center justify-content-center border-top bg-200 fw-bold"
                             >
-                                <span t-esc="formatValue(section.grandTotal)" />
+                                <span
+                                    t-att-class="isNegative(section.grandTotal) ? 'text-danger' : ''"
+                                    t-esc="formatValue(section.grandTotal)"
+                                />
                             </div>
 
                             <!-- Rows in section -->
@@ -86,14 +97,14 @@
                                 <div
                                     class="o_grid_row_title o_grid_sticky_left d-flex align-items-center ps-3 pe-2 py-1 position-relative"
                                     t-att-data-row-id="row.id"
-                                    t-att-class="(state.hoveredRow === row.id or state.hoveredCol === null) ? '' : 'opacity-75'"
+                                    t-att-class="row_index % 2 === 0 ? 'bg-view' : 'bg-100'"
                                 >
                                     <span class="z-1 text-truncate" t-esc="row.label" />
                                 </div>
                                 <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
                                     <div
                                         class="o_grid_cell d-flex align-items-center justify-content-center position-relative"
-                                        t-att-class="(isHovered(row.id, col.id) ? 'o_grid_cell_highlighted' : '') + ' ' + (col.isWeekend ? 'bg-100' : '')"
+                                        t-att-class="(isHovered(row.id, col.id) ? 'o_grid_cell_highlighted' : '') + (row_index % 2 === 0 ? ' bg-view' : ' bg-100') + (col.isWeekend ? ' bg-opacity-50' : '')"
                                         t-att-data-row-id="row.id"
                                         t-att-data-col-id="col.id"
                                         t-on-mouseover="() => this.onCellMouseOver(row.id, col.id)"
@@ -102,7 +113,7 @@
                                     >
                                         <t t-if="col.isToday">
                                             <div
-                                                class="position-absolute top-0 start-0 w-100 h-100 o_grid_today_overlay"
+                                                class="position-absolute top-0 start-0 w-100 h-100 bg-info bg-opacity-25"
                                             />
                                         </t>
                                         <t t-if="isEditing(row.id, col.id)">
@@ -114,20 +125,27 @@
                                         </t>
                                         <t t-elif="getCell(row, col.id)">
                                             <span
-                                                class="o_grid_cell_value"
+                                                class="o_grid_cell_value z-1"
+                                                t-att-class="isNegative(getCell(row, col.id).value) ? 'text-danger' : ''"
                                                 t-esc="formatValue(getCell(row, col.id).value)"
                                             />
                                         </t>
                                         <t t-else="">
-                                            <span class="o_grid_cell_empty">·</span>
+                                            <span
+                                                class="o_grid_cell_empty text-muted"
+                                            >·</span>
                                         </t>
                                     </div>
                                 </t>
                                 <div
-                                    class="o_grid_total_cell d-flex align-items-center justify-content-center"
-                                    t-att-class="state.hoveredRow === row.id ? 'bg-100' : ''"
+                                    class="o_grid_total_cell o_grid_sticky_right d-flex align-items-center justify-content-center py-1"
+                                    t-att-class="(row_index % 2 === 0 ? 'bg-view' : 'bg-100') + (state.hoveredRow === row.id ? ' bg-100' : '')"
                                 >
-                                    <span t-esc="formatValue(row.grandTotal)" />
+                                    <span
+                                        class="fw-bold"
+                                        t-att-class="isNegative(row.grandTotal) ? 'text-danger' : ''"
+                                        t-esc="formatValue(row.grandTotal)"
+                                    />
                                 </div>
                             </t>
                         </t>
@@ -139,13 +157,14 @@
                             <div
                                 class="o_grid_row_title o_grid_sticky_left d-flex align-items-center ps-3 pe-2 py-1 position-relative"
                                 t-att-data-row-id="row.id"
+                                t-att-class="row_index % 2 === 0 ? 'bg-view' : 'bg-100'"
                             >
                                 <span class="z-1 text-truncate" t-esc="row.label" />
                             </div>
                             <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
                                 <div
                                     class="o_grid_cell d-flex align-items-center justify-content-center position-relative"
-                                    t-att-class="(isHovered(row.id, col.id) ? 'o_grid_cell_highlighted' : '') + ' ' + (col.isWeekend ? 'bg-100' : '')"
+                                    t-att-class="(isHovered(row.id, col.id) ? 'o_grid_cell_highlighted' : '') + (row_index % 2 === 0 ? ' bg-view' : ' bg-100') + (col.isWeekend ? ' bg-opacity-50' : '')"
                                     t-att-data-row-id="row.id"
                                     t-att-data-col-id="col.id"
                                     t-on-mouseover="() => this.onCellMouseOver(row.id, col.id)"
@@ -154,7 +173,7 @@
                                 >
                                     <t t-if="col.isToday">
                                         <div
-                                            class="position-absolute top-0 start-0 w-100 h-100 o_grid_today_overlay"
+                                            class="position-absolute top-0 start-0 w-100 h-100 bg-info bg-opacity-25"
                                         />
                                     </t>
                                     <t t-if="isEditing(row.id, col.id)">
@@ -166,41 +185,54 @@
                                     </t>
                                     <t t-elif="getCell(row, col.id)">
                                         <span
-                                            class="o_grid_cell_value"
+                                            class="o_grid_cell_value z-1"
+                                            t-att-class="isNegative(getCell(row, col.id).value) ? 'text-danger' : ''"
                                             t-esc="formatValue(getCell(row, col.id).value)"
                                         />
                                     </t>
                                     <t t-else="">
-                                        <span class="o_grid_cell_empty">·</span>
+                                        <span
+                                            class="o_grid_cell_empty text-muted"
+                                        >·</span>
                                     </t>
                                 </div>
                             </t>
                             <div
-                                class="o_grid_total_cell d-flex align-items-center justify-content-center"
-                                t-att-class="state.hoveredRow === row.id ? 'bg-100' : ''"
+                                class="o_grid_total_cell o_grid_sticky_right d-flex align-items-center justify-content-center py-1"
+                                t-att-class="(row_index % 2 === 0 ? 'bg-view' : 'bg-100')"
                             >
-                                <span t-esc="formatValue(row.grandTotal)" />
+                                <span
+                                    class="fw-bold"
+                                    t-att-class="isNegative(row.grandTotal) ? 'text-danger' : ''"
+                                    t-esc="formatValue(row.grandTotal)"
+                                />
                             </div>
                         </t>
                     </t>
 
                     <!-- Footer: column totals -->
                     <div
-                        class="o_grid_total_cell o_grid_sticky_left o_grid_sticky_bottom d-flex align-items-center px-3 py-2 border-top bg-100 fw-bold"
+                        class="o_grid_total_cell o_grid_sticky_left o_grid_sticky_bottom d-flex align-items-center px-3 py-2 border-top bg-100 fw-bold small text-uppercase text-muted"
                     >
                         <span t-esc="measureLabel" />
                     </div>
                     <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
                         <div
-                            class="o_grid_total_cell o_grid_sticky_bottom d-flex align-items-center justify-content-center border-top bg-100 fw-bold"
+                            class="o_grid_total_cell o_grid_sticky_bottom d-flex align-items-center justify-content-center border-top bg-100"
                             t-att-class="state.hoveredCol === col.id ? 'bg-200' : ''"
                         >
-                            <span t-esc="formatValue(col.grandTotal)" />
+                            <span
+                                class="fs-6 fw-bolder"
+                                t-att-class="isNegative(col.grandTotal) ? 'text-danger' : ''"
+                                t-esc="formatValue(col.grandTotal)"
+                            />
                         </div>
                     </t>
                     <div
-                        class="o_grid_total_cell o_grid_sticky_bottom d-flex align-items-center justify-content-center border-top bg-200 fw-bold"
-                    />
+                        class="o_grid_total_cell o_grid_sticky_right o_grid_sticky_bottom d-flex align-items-center justify-content-center border-top bg-200"
+                    >
+                        <span class="fs-6 fw-bolder" t-esc="formatValue(grandTotal)" />
+                    </div>
                 </div>
             </t>
         </div>
