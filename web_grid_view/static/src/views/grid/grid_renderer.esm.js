@@ -137,6 +137,14 @@ export class GridRenderer extends Component {
         return row.cells?.[colId] || undefined;
     }
 
+    get measureLabel() {
+        return (
+            this.model.archInfo?.measureField?.string ||
+            this.model.fields?.[this.model.measureFieldName]?.field_description ||
+            "Total"
+        );
+    }
+
     getFieldType() {
         return this.model.fields?.[this.model.measureFieldName]?.type || "float";
     }

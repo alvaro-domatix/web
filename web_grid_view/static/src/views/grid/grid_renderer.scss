@@ -1,134 +1,156 @@
 .o_grid_renderer {
-    .o_grid_table_wrap {
-        overflow: auto;
-        max-height: calc(100vh - 220px);
-        padding: 0;
+    height: inherit;
+    overflow: hidden;
+
+    .o_grid_grid {
+        min-width: fit-content;
     }
 
-    .o_grid_table_inner {
-        display: grid;
-        font-size: 0.85rem;
-    }
-
-    .o_grid_header_cell,
-    .o_grid_cell,
-    .o_grid_row_label,
-    .o_grid_row_total,
-    .o_grid_footer_cell,
-    .o_grid_section_label,
-    .o_grid_section_cell,
-    .o_grid_section_total,
-    .o_grid_footer_label,
-    .o_grid_corner,
-    .o_grid_total_header,
-    .o_grid_footer_corner,
-    .o_grid_barchart_cell,
-    .o_grid_barchart_label,
-    .o_grid_barchart_corner {
-        padding: 4px 6px;
-        text-align: center;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        border-right: 1px solid rgba(0, 0, 0, 0.04);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        white-space: nowrap;
-        min-height: 32px;
-    }
-
-    .o_grid_row_label,
-    .o_grid_section_label,
-    .o_grid_footer_label {
-        text-align: left;
-        justify-content: flex-start;
-        font-weight: 500;
-        position: sticky;
-        left: 0;
-        background: inherit;
-        z-index: 2;
-        min-width: 120px;
-    }
-
-    .o_grid_header_cell {
-        font-weight: 600;
-        background: rgba(0, 0, 0, 0.03);
-        position: sticky;
-        top: 0;
-        z-index: 3;
-    }
-
-    .o_grid_corner {
-        position: sticky;
+    // Overlays para highlights (patron enterprise)
+    .o_grid_cell_overlay {
+        position: absolute;
         top: 0;
         left: 0;
-        z-index: 4;
-        background: rgba(0, 0, 0, 0.03);
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        --bs-bg-opacity: 0;
+        transition: --bs-bg-opacity 0.1s ease;
     }
 
-    .o_grid_today {
-        background-color: rgba(var(--bs-primary-rgb), 0.1);
-        font-weight: 600;
+    .o_grid_highlighted > .o_grid_cell_overlay {
+        --bs-bg-opacity: 0.1;
     }
 
-    .o_grid_weekend {
-        background-color: rgba(0, 0, 0, 0.03);
+    .o_grid_cell_highlighted > .o_grid_cell_overlay {
+        --bs-bg-opacity: 0.15;
     }
 
-    .o_grid_hovered {
-        background-color: rgba(var(--bs-primary-rgb), 0.07);
-    }
+    // Header de columna
+    .o_grid_column_title {
+        position: relative;
+        z-index: 10;
 
-    .o_grid_cell {
-        cursor: pointer;
-        transition: background-color 0.1s;
-
-        &:hover {
-            background-color: rgba(var(--bs-primary-rgb), 0.15);
+        span {
+            white-space: pre-line;
+            text-align: center;
+            line-height: 1.2;
         }
     }
 
-    .o_grid_row_total,
-    .o_grid_section_total,
-    .o_grid_total_header,
-    .o_grid_footer_cell {
-        background-color: rgba(0, 0, 0, 0.05);
-        font-weight: 600;
+    // Today column overlay
+    .o_grid_today_overlay {
+        background-color: rgba(var(--bs-info-rgb), 0.5);
     }
 
-    .o_grid_footer_label,
-    .o_grid_footer_cell,
-    .o_grid_footer_corner {
-        border-top: 2px solid rgba(0, 0, 0, 0.1);
-        position: sticky;
-        bottom: 0;
-        background: white;
+    // Sticky panes (responsive como enterprise)
+    @media (min-width: 768px) {
+        .o_grid_sticky_top {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .o_grid_sticky_left {
+            position: sticky;
+            left: 0;
+            z-index: 5;
+        }
+
+        .o_grid_sticky_corner {
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: 15;
+        }
+
+        .o_grid_sticky_bottom {
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
     }
 
-    .o_grid_section_label {
-        background: rgba(0, 0, 0, 0.06);
-        font-weight: bold;
+    // Section header
+    .o_grid_section_title {
+        font-weight: 700;
+        font-size: 0.9rem;
     }
 
-    .o_grid_section_total {
-        background: rgba(0, 0, 0, 0.06);
+    // Row label
+    .o_grid_row_title {
+        font-weight: 500;
+        font-size: 0.875rem;
+
+        .o_form_uri {
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 
-    .o_grid_cell_input {
-        width: 100%;
-        padding: 2px 4px;
+    // Cell
+    .o_grid_cell {
+        position: relative;
+        font-variant-numeric: tabular-nums;
+        transition: background-color 0.1s ease;
+
+        &:hover {
+            background-color: rgba(var(--bs-primary-rgb), 0.12);
+        }
     }
 
-    .o_grid_barchart_cell {
-        padding: 0;
-        height: 30px;
-        align-items: flex-end;
+    // Cell value
+    .o_grid_cell_value {
+        position: relative;
+        z-index: 1;
+        font-size: 0.85rem;
     }
 
-    .o_grid_barchart_bar {
-        width: 80%;
-        background-color: rgba(var(--bs-primary-rgb), 0.5);
-        border-radius: 2px 2px 0 0;
+    // Empty cell (clickable para crear)
+    .o_grid_cell_empty {
+        color: rgba(var(--bs-body-color-rgb), 0.3);
+        font-size: 0.75rem;
+    }
+
+    // Totals
+    .o_grid_total_cell {
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+    }
+
+    // Bar chart
+    .o_grid_bar {
+        background: linear-gradient(
+            to top,
+            rgba(var(--bs-primary-rgb), 0.6),
+            rgba(var(--bs-primary-rgb), 0.3)
+        );
+        border-radius: 3px 3px 0 0;
         min-height: 2px;
-        transition: height 0.2s;
+        transition: height 0.3s ease;
+    }
+
+    // Input de edicion
+    .o_grid_cell_input {
+        text-align: center;
+        padding: 0;
+        border: 2px solid var(--bs-primary);
+        border-radius: 4px;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+// Toolbar del controller
+.o_grid_toolbar {
+    .btn {
+        border-radius: 6px;
+    }
+
+    .o_grid_scale_active {
+        background-color: var(--bs-primary);
+        color: white;
+        border-color: var(--bs-primary);
     }
 }

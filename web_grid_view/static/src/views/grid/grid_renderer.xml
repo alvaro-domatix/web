@@ -1,145 +1,206 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
-    <t t-name="web_grid_view.GridCells">
-        <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
-            <div
-                t-att-class="'o_grid_cell' + (col.isToday ? ' o_grid_today' : '') + (col.isWeekend ? ' o_grid_weekend' : '') + (isHovered(row.id, col.id) ? ' o_grid_hovered' : '')"
-                t-att-data-row-id="row.id"
-                t-att-data-col-id="col.id"
-                t-on-mouseover="() => this.onCellMouseOver(row.id, col.id)"
-                t-on-mouseout="() => this.onCellMouseOut()"
-                t-on-click="() => this.onCellClick(row.id, col.id)"
-            >
-                <GridComponent
-                    type="getFieldType()"
-                    widget="getWidget()"
-                    cell="getCell(row, col.id)"
-                    row="row"
-                    isEditing="isEditing(row.id, col.id)"
-                    onCommit.bind="onCellCommit"
-                    onNavigate.bind="onCellNavigate"
-                />
-            </div>
-        </t>
-    </t>
-
-    <t t-name="web_grid_view.GridRowLine">
-        <div
-            class="o_grid_row_label"
-            t-att-data-row-id="row.id"
-            t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
-        >
-            <t t-component="getRowLabelComponent(row)" row="row" />
-        </div>
-        <t t-call="web_grid_view.GridCells" />
-        <div
-            class="o_grid_row_total"
-            t-att-class="state.hoveredRow === row.id ? 'o_grid_hovered' : ''"
-        >
-            <strong t-esc="formatValue(row.grandTotal)" />
-        </div>
-    </t>
-
     <t t-name="web_grid_view.GridRenderer">
-        <div class="o_grid_renderer" t-ref="grid">
+        <div class="o_grid_renderer position-relative z-0" t-ref="grid">
             <t t-if="!model.activeRange">
-                <div class="text-muted p-4 text-center">
-                    <i class="fa fa-th fa-2x mb-2" />
-                    <p>This view does not support date columns.</p>
+                <div
+                    class="d-flex align-items-center justify-content-center"
+                    style="min-height: 300px;"
+                >
+                    <div class="text-center text-muted">
+                        <i class="fa fa-th fa-3x mb-3 opacity-50" />
+                        <p class="mb-0">This view requires a date column.</p>
+                    </div>
                 </div>
             </t>
             <t t-elif="!hasData">
-                <div class="text-muted p-4 text-center">
-                    <i class="fa fa-inbox fa-2x mb-2" />
-                    <p>No data for this period.</p>
+                <div
+                    class="d-flex align-items-center justify-content-center"
+                    style="min-height: 300px;"
+                >
+                    <div class="text-center text-muted">
+                        <i class="fa fa-inbox fa-3x mb-3 opacity-50" />
+                        <p class="mb-0">No data for this period.</p>
+                    </div>
                 </div>
             </t>
             <t t-else="">
-                <div class="o_grid_table_wrap">
+                <div
+                    class="o_grid_grid d-grid gap-0 border-bottom"
+                    t-att-style="'grid-template-columns: ' + gridTemplateColumns"
+                >
+                    <!-- Header row -->
                     <div
-                        class="o_grid_table_inner"
-                        t-att-style="'grid-template-columns: ' + gridTemplateColumns"
-                    >
-                        <!-- Header row -->
-                        <div class="o_grid_header_cell o_grid_corner" />
-                        <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
-                            <div
-                                t-att-class="'o_grid_header_cell o_grid_col_header' + (col.isToday ? ' o_grid_today' : '') + (col.isWeekend ? ' o_grid_weekend' : '')"
-                                t-att-data-col-id="col.id"
-                            >
-                                <span t-esc="col.label" />
-                            </div>
-                        </t>
-                        <div class="o_grid_header_cell o_grid_total_header">Total</div>
-
-                        <!-- Sections with rows -->
-                        <t t-if="model.hasSections">
-                            <t
-                                t-foreach="model.sections"
-                                t-as="section"
-                                t-key="section.id"
-                            >
-                                <!-- Section header -->
-                                <div
-                                    class="o_grid_section_label"
-                                    t-att-data-row-id="section.id"
-                                >
-                                    <strong t-esc="section.label" />
-                                </div>
-                                <div
-                                    t-foreach="visibleColumns"
-                                    t-as="col"
-                                    t-key="col.id"
-                                    class="o_grid_section_cell"
-                                />
-                                <div class="o_grid_section_total">
-                                    <strong t-esc="formatValue(section.grandTotal)" />
-                                </div>
-
-                                <!-- Rows in section -->
-                                <t t-foreach="section.rows" t-as="row" t-key="row.id">
-                                    <t t-call="web_grid_view.GridRowLine" />
-                                </t>
-                            </t>
-                        </t>
-
-                        <!-- Rows without sections -->
-                        <t t-else="">
-                            <t t-foreach="model.rows" t-as="row" t-key="row.id">
-                                <t t-call="web_grid_view.GridRowLine" />
-                            </t>
-                        </t>
-
-                        <!-- Footer: column totals -->
-                        <div class="o_grid_footer_label">
-                            <strong>Total</strong>
-                        </div>
-                        <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
-                            <div
-                                class="o_grid_footer_cell"
-                                t-att-class="state.hoveredCol === col.id ? 'o_grid_hovered' : ''"
-                            >
-                                <strong t-esc="formatValue(col.grandTotal)" />
-                            </div>
-                        </t>
-                        <div class="o_grid_footer_corner" />
-
-                        <!-- Bar chart row -->
-                        <t
-                            t-if="model.archInfo &amp;&amp; model.archInfo.hasBarchartTotal"
+                        class="o_grid_column_title o_grid_sticky_corner d-flex align-items-center px-3 py-2 border-bottom bg-100 fw-bold text-muted small text-uppercase"
+                    />
+                    <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                        <div
+                            class="o_grid_column_title o_grid_sticky_top d-flex align-items-center justify-content-center px-2 py-2 border-bottom text-bg-100"
+                            t-att-class="col.isToday ? 'fw-bolder' : 'fw-bold'"
+                            t-att-data-col-id="col.id"
                         >
-                            <div class="o_grid_barchart_label" />
-                            <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
-                                <div class="o_grid_barchart_cell">
-                                    <div
-                                        class="o_grid_barchart_bar"
-                                        t-att-style="'height: ' + getBarHeight(col)"
+                            <t t-if="col.isToday">
+                                <div
+                                    class="position-absolute top-0 start-0 w-100 h-100 o_grid_today_overlay"
+                                />
+                            </t>
+                            <span class="z-1 text-center" t-esc="col.label" />
+                        </div>
+                    </t>
+                    <div
+                        class="o_grid_column_title o_grid_sticky_top d-flex align-items-center justify-content-center px-3 py-2 border-bottom text-bg-200 fw-bold small"
+                    >
+                        <span class="z-1" t-esc="measureLabel" />
+                    </div>
+
+                    <!-- Sections and rows -->
+                    <t t-if="model.hasSections">
+                        <t t-foreach="model.sections" t-as="section" t-key="section.id">
+                            <!-- Section header -->
+                            <div
+                                class="o_grid_section_title o_grid_sticky_left d-flex align-items-center px-3 py-2 border-top bg-200 position-relative"
+                                t-att-data-row-id="section.id"
+                            >
+                                <span class="z-1 text-truncate" t-esc="section.label" />
+                            </div>
+                            <div
+                                t-foreach="visibleColumns"
+                                t-as="col"
+                                t-key="col.id"
+                                class="o_grid_total_cell d-flex align-items-center justify-content-center border-top bg-200"
+                            >
+                                <t t-if="getCell(section, col.id)">
+                                    <span
+                                        t-esc="formatValue(getCell(section, col.id)?.value)"
                                     />
+                                </t>
+                            </div>
+                            <div
+                                class="o_grid_total_cell d-flex align-items-center justify-content-center border-top bg-200"
+                            >
+                                <span t-esc="formatValue(section.grandTotal)" />
+                            </div>
+
+                            <!-- Rows in section -->
+                            <t t-foreach="section.rows" t-as="row" t-key="row.id">
+                                <div
+                                    class="o_grid_row_title o_grid_sticky_left d-flex align-items-center ps-3 pe-2 py-1 position-relative"
+                                    t-att-data-row-id="row.id"
+                                    t-att-class="(state.hoveredRow === row.id or state.hoveredCol === null) ? '' : 'opacity-75'"
+                                >
+                                    <span class="z-1 text-truncate" t-esc="row.label" />
+                                </div>
+                                <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                                    <div
+                                        class="o_grid_cell d-flex align-items-center justify-content-center position-relative"
+                                        t-att-class="(isHovered(row.id, col.id) ? 'o_grid_cell_highlighted' : '') + ' ' + (col.isWeekend ? 'bg-100' : '')"
+                                        t-att-data-row-id="row.id"
+                                        t-att-data-col-id="col.id"
+                                        t-on-mouseover="() => this.onCellMouseOver(row.id, col.id)"
+                                        t-on-mouseout="() => this.onCellMouseOut()"
+                                        t-on-click="() => this.onCellClick(row.id, col.id)"
+                                    >
+                                        <t t-if="col.isToday">
+                                            <div
+                                                class="position-absolute top-0 start-0 w-100 h-100 o_grid_today_overlay"
+                                            />
+                                        </t>
+                                        <t t-if="isEditing(row.id, col.id)">
+                                            <input
+                                                type="text"
+                                                class="o_grid_cell_input form-control form-control-sm"
+                                                t-att-value="getCell(row, col.id)?.value or ''"
+                                            />
+                                        </t>
+                                        <t t-elif="getCell(row, col.id)">
+                                            <span
+                                                class="o_grid_cell_value"
+                                                t-esc="formatValue(getCell(row, col.id).value)"
+                                            />
+                                        </t>
+                                        <t t-else="">
+                                            <span class="o_grid_cell_empty">·</span>
+                                        </t>
+                                    </div>
+                                </t>
+                                <div
+                                    class="o_grid_total_cell d-flex align-items-center justify-content-center"
+                                    t-att-class="state.hoveredRow === row.id ? 'bg-100' : ''"
+                                >
+                                    <span t-esc="formatValue(row.grandTotal)" />
                                 </div>
                             </t>
-                            <div class="o_grid_barchart_corner" />
                         </t>
+                    </t>
+
+                    <!-- Rows without sections -->
+                    <t t-else="">
+                        <t t-foreach="model.rows" t-as="row" t-key="row.id">
+                            <div
+                                class="o_grid_row_title o_grid_sticky_left d-flex align-items-center ps-3 pe-2 py-1 position-relative"
+                                t-att-data-row-id="row.id"
+                            >
+                                <span class="z-1 text-truncate" t-esc="row.label" />
+                            </div>
+                            <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                                <div
+                                    class="o_grid_cell d-flex align-items-center justify-content-center position-relative"
+                                    t-att-class="(isHovered(row.id, col.id) ? 'o_grid_cell_highlighted' : '') + ' ' + (col.isWeekend ? 'bg-100' : '')"
+                                    t-att-data-row-id="row.id"
+                                    t-att-data-col-id="col.id"
+                                    t-on-mouseover="() => this.onCellMouseOver(row.id, col.id)"
+                                    t-on-mouseout="() => this.onCellMouseOut()"
+                                    t-on-click="() => this.onCellClick(row.id, col.id)"
+                                >
+                                    <t t-if="col.isToday">
+                                        <div
+                                            class="position-absolute top-0 start-0 w-100 h-100 o_grid_today_overlay"
+                                        />
+                                    </t>
+                                    <t t-if="isEditing(row.id, col.id)">
+                                        <input
+                                            type="text"
+                                            class="o_grid_cell_input form-control form-control-sm"
+                                            t-att-value="getCell(row, col.id)?.value or ''"
+                                        />
+                                    </t>
+                                    <t t-elif="getCell(row, col.id)">
+                                        <span
+                                            class="o_grid_cell_value"
+                                            t-esc="formatValue(getCell(row, col.id).value)"
+                                        />
+                                    </t>
+                                    <t t-else="">
+                                        <span class="o_grid_cell_empty">·</span>
+                                    </t>
+                                </div>
+                            </t>
+                            <div
+                                class="o_grid_total_cell d-flex align-items-center justify-content-center"
+                                t-att-class="state.hoveredRow === row.id ? 'bg-100' : ''"
+                            >
+                                <span t-esc="formatValue(row.grandTotal)" />
+                            </div>
+                        </t>
+                    </t>
+
+                    <!-- Footer: column totals -->
+                    <div
+                        class="o_grid_total_cell o_grid_sticky_left o_grid_sticky_bottom d-flex align-items-center px-3 py-2 border-top bg-100 fw-bold"
+                    >
+                        <span t-esc="measureLabel" />
                     </div>
+                    <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                        <div
+                            class="o_grid_total_cell o_grid_sticky_bottom d-flex align-items-center justify-content-center border-top bg-100 fw-bold"
+                            t-att-class="state.hoveredCol === col.id ? 'bg-200' : ''"
+                        >
+                            <span t-esc="formatValue(col.grandTotal)" />
+                        </div>
+                    </t>
+                    <div
+                        class="o_grid_total_cell o_grid_sticky_bottom d-flex align-items-center justify-content-center border-top bg-200 fw-bold"
+                    />
                 </div>
             </t>
         </div>
