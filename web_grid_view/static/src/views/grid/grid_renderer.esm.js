@@ -1,4 +1,5 @@
 import {Component, onMounted, useRef, useState} from "@odoo/owl";
+import {useService} from "@web/core/utils/hooks";
 import {GridComponent} from "../../components/grid_component.esm";
 import {GridRow} from "../../components/grid_row.esm";
 import {registry} from "@web/core/registry";
@@ -21,6 +22,7 @@ export class GridRenderer extends Component {
             editingRow: null,
             editingCol: null,
         });
+        this.actionService = useService("action");
         this.gridRef = useRef("grid");
         onMounted(() => this._focusOnToday());
     }
@@ -51,6 +53,55 @@ export class GridRenderer extends Component {
 
     get maxColumnTotal() {
         return Math.max(1, ...this.visibleColumns.map((c) => c.grandTotal));
+    }
+
+    openRecords(rowId, colId) {
+        const row = this.model.hasSections
+            ? this._findRowInSection(rowId)
+            : this.model.rows.find((r) => r.id === rowId);
+        if (!row || !row.cells[colId]) return;
+        const cell = row.cells[colId];
+        this.actionService.doAction({
+            type: "ir.actions.act_window",
+            name:
+                row.label +
+                " - " +
+                (this.model.columns.find((c) => c.id === colId)?.label || ""),
+            res_model: this.model.resModel,
+            views: [
+                [false, "list"],
+                [false, "form"],
+            ],
+            domain: cell.domain,
+        });
+    }
+
+    _findRowInSection(rowId) {
+        for (const section of this.model.sections) {
+            const row = section.rows.find((r) => r.id === rowId);
+            if (row) return row;
+        }
+        return null;
+    }
+
+    onCreateLine(section) {
+        const ctx = {default_date: this.model.periodStart.toISODate()};
+        if (section) ctx.default_category = section.label;
+        this.actionService.doAction({
+            type: "ir.actions.act_window",
+            res_model: this.model.resModel,
+            views: [[false, "form"]],
+            target: "new",
+            context: ctx,
+        });
+    }
+
+    getCellColorClass(value) {
+        if (value === undefined || value === null) return "";
+        const num = Number(value);
+        if (num >= 6) return "text-success fw-medium";
+        if (num > 0 && num < 3) return "text-warning";
+        return "";
     }
 
     isNegative(value) {

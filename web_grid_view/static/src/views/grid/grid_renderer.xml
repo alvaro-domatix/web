@@ -126,7 +126,7 @@
                                         <t t-elif="getCell(row, col.id)">
                                             <span
                                                 class="o_grid_cell_value z-1"
-                                                t-att-class="isNegative(getCell(row, col.id).value) ? 'text-danger' : ''"
+                                                t-att-class="getCellColorClass(getCell(row, col.id).value)"
                                                 t-esc="formatValue(getCell(row, col.id).value)"
                                             />
                                         </t>
@@ -135,6 +135,14 @@
                                                 class="o_grid_cell_empty text-muted"
                                             >·</span>
                                         </t>
+                                        <!-- Magnifier glass -->
+                                        <a
+                                            class="o_grid_magnifier position-absolute top-0 end-0 p-1"
+                                            t-on-click.prevent="() => this.openRecords(row.id, col.id)"
+                                            title="View records"
+                                        >
+                                            <i class="fa fa-search fa-xs text-muted" />
+                                        </a>
                                     </div>
                                 </t>
                                 <div
@@ -148,6 +156,25 @@
                                     />
                                 </div>
                             </t>
+
+                            <!-- Add a line -->
+                            <div
+                                class="o_grid_row_title o_grid_sticky_left d-flex align-items-center ps-3 py-1"
+                                t-att-class="row_index % 2 === 0 ? 'bg-view' : 'bg-100'"
+                            >
+                                <a
+                                    class="btn btn-link btn-sm text-muted p-0"
+                                    t-on-click="() => this.onCreateLine(section)"
+                                >
+                                    <i class="fa fa-plus-circle me-1" />Add a line
+                                </a>
+                            </div>
+                            <t t-foreach="visibleColumns" t-as="col" t-key="col.id">
+                                <div
+                                    t-att-class="'bg-view bg-opacity-50' + (row_index % 2 === 0 ? '' : ' bg-100')"
+                                />
+                            </t>
+                            <div class="bg-view bg-opacity-50" />
                         </t>
                     </t>
 
@@ -186,7 +213,7 @@
                                     <t t-elif="getCell(row, col.id)">
                                         <span
                                             class="o_grid_cell_value z-1"
-                                            t-att-class="isNegative(getCell(row, col.id).value) ? 'text-danger' : ''"
+                                            t-att-class="getCellColorClass(getCell(row, col.id).value)"
                                             t-esc="formatValue(getCell(row, col.id).value)"
                                         />
                                     </t>
@@ -195,6 +222,13 @@
                                             class="o_grid_cell_empty text-muted"
                                         >·</span>
                                     </t>
+                                    <a
+                                        class="o_grid_magnifier position-absolute top-0 end-0 p-1"
+                                        t-on-click.prevent="() => this.openRecords(row.id, col.id)"
+                                        title="View records"
+                                    >
+                                        <i class="fa fa-search fa-xs text-muted" />
+                                    </a>
                                 </div>
                             </t>
                             <div

@@ -101,3 +101,28 @@
     color: white !important;
     border-color: var(--bs-primary) !important;
 }
+
+.o_grid_magnifier {
+    display: none;
+    font-size: 0.7rem;
+    text-decoration: none;
+    z-index: 2;
+    i {
+        opacity: 0.4;
+        transition: opacity 0.15s;
+    }
+    &:hover i {
+        opacity: 1;
+    }
+}
+
+.o_grid_cell:hover .o_grid_magnifier {
+    display: flex;
+}
+
+.o_grid_add_line .btn-link {
+    font-size: 0.8rem;
+    &:hover {
+        text-decoration: none;
+    }
+}
